@@ -132,6 +132,8 @@ edx            0x14                20
 
 [linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
 
+[linux syscalls](https://x86.syscall.sh/)
+
 [linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
 
 [read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
