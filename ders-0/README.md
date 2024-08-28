@@ -136,9 +136,10 @@ edx            0x14                20
 
 #### segmentation hatası
 
-## dipnot
-
 [^1]: nesne (object) dosyasına dönüştürme
+
 [^2]: bütüncül disassembler programı
+
 [^3]: linkleme işlemi
+
 [^4]: ikil sayı
