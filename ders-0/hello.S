@@ -18,6 +18,6 @@ section .text
     int 0x80 ;; interrupt
 
     mov eax, 0x1
-    ;; xor ebx, ebx
-    ;; int 0x80
+    xor ebx, ebx
+    int 0x80
 

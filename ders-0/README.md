@@ -23,7 +23,7 @@ total 0
 ```terminal
 $ objdump -M intel -D hello
            ^
-           amd64 da olabilir
+           amd64 de olabilir
 ```
 
 ### interrupt
@@ -31,17 +31,17 @@ $ objdump -M intel -D hello
 **interrupt**: kesme
 **poll**: iş var mı yok mu denetleme(?)
 
-
-
-`disas <func>`: assembly code
+`disas <fonksiyon-adı>`: assembly code
 
 `run`: programı çalıştırma
 
-`break <func>`: breakpoint
+`break <fonksiyon-adı>`: breakpoint
 
-`$ nasm  -f elf32 -o hello.o hello.S ` [^1]
-`$ objdump -M intel -D hello.o` [^2]
-`$ ld -m elf_i386 -o hello_elf32 hello.o ` [^3]
+**örnek kullanımlar;**
+
+- `$ nasm  -f elf32 -o hello.o hello.S` [^1]
+- `$ objdump -M intel -D hello.o` [^2]
+- `$ ld -m elf_i386 -o hello_elf32 hello.o` [^3]
 
 ```terminal
 $ file hello_elf32
@@ -132,12 +132,38 @@ edx            0x14                20
 
 [linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
 
-#### segmentation hatası
+[linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
+
+[read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
+
+`(gdb) x <adrr>`
+
+`xxd <ikil dosya>`
+
+```gdb
+(gdb) x 0x08049000
+0x8049000 <_start>:     0x000004b8
+(gdb) x 0x804a000
+0x804a000:      0x6c6c6548
+(gdb) x/10 0x804a000
+0x804a000:      0x6c6c6548      0x6f57206f      0x0a646c72      Cannot access memory at address 0x804a00c
+(gdb) x/10c 0x804a000
+0x804a000:      72 'H'  101 'e' 108 'l' 108 'l' 111 'o' 32 ' '  87 'W'  111 'o'
+0x804a008:      114 'r' 108 'l'
+(gdb) x/10s 0x804a000
+0x804a000:      "Hello World\n"<error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+```
 
 [^1]: nesne (object) dosyasına dönüştürme
-
 [^2]: bütüncül disassembler programı
-
 [^3]: linkleme işlemi
-
 [^4]: ikil sayı
