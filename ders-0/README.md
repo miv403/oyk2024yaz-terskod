@@ -39,11 +39,9 @@ $ objdump -M intel -D hello
 
 `break <func>`: breakpoint
 
-```terminal
 `$ nasm  -f elf32 -o hello.o hello.S ` [^1]
 `$ objdump -M intel -D hello.o` [^2]
 `$ ld -m elf_i386 -o hello_elf32 hello.o ` [^3]
-```
 
 ```terminal
 $ file hello_elf32
