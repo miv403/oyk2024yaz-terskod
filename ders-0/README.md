@@ -22,8 +22,8 @@ total 0
 
 ```terminal
 $ objdump -M intel -D hello
-           ^
-           amd64 de olabilir
+             ^
+             amd64 de olabilir
 ```
 
 ### interrupt
@@ -39,9 +39,9 @@ $ objdump -M intel -D hello
 
 **örnek kullanımlar;**
 
-- `$ nasm  -f elf32 -o hello.o hello.S` [^1]
-- `$ objdump -M intel -D hello.o` [^2]
-- `$ ld -m elf_i386 -o hello_elf32 hello.o` [^3]
+- `nasm  -f elf32 -o hello.o hello.S` [^1]
+- `ld -m elf_i386 -o hello_elf32 hello.o` [^3]
+- `objdump -M intel -D hello.o` [^2]
 
 ```terminal
 $ file hello_elf32
@@ -79,22 +79,33 @@ hello_elf32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), staticall
 
 `_start`'a breakpoint koyduktan sonra `disas _start` ile `_start`ın içine bakıyoruz. `si` ile programı ilerletiyoruz. `info registers <register>` ile register(lar)'a bakılabiliyor.
 
-**örnek kullanım**:
-
-```terminal
-(gdb) info registers eax
-> eax registerları gösteriyor
-```
+> [!NOTE] örnek
+> kaydedicilerin içeriğine bakmak
+>
+> ```terminal
+> (gdb) info registers eax
+>  eax registerları gösteriyor
+> ```
 
 ### gdb
 
+> [!NOTE] intel gösteriminin kullanılması
+>
+> ```gdb
+> (gdb) set disassembly-flavor intel
+> ```
+
+#### örnek gdb kullanımı
+
+**continue**:
+
 ```gdb
-(gdb) set disassembly-flavor intel
+(gdb) c 
 ```
 
-örnek gdb kullanımı
+**step instruction**:
 
-```assembly
+```gdb
 (gdb) disas _start
 Dump of assembler code for function _start:
 => 0x08049000 <+0>:     mov    eax,0x4
@@ -126,17 +137,16 @@ edx            0x14                20
 
 [intel reference manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 
+#### sistem çağrıları
+
 `int 0x80`: eax'deki numaradaki syscall çağırılıyor.
 
 ön hazırlık (kaydedicilerin doldurulması) tamamlandıktan sonra int çalıştırılıyor ve gerekli parametreler ile sistem çağrısı gerçekleşiyor
 
-[linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
-
-[linux syscalls](https://x86.syscall.sh/)
-
-[linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
-
-[read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
+- [linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
+- [linux syscalls](https://x86.syscall.sh/)
+- [linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
+- [read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
 
 `(gdb) x <adrr>`
 
