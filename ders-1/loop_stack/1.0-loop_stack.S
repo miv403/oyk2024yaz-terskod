@@ -1,3 +1,4 @@
+; stack kullanarak oluşturulmuş geri sayaçlı döngü 
 global _start
 
 section .data
@@ -16,9 +17,9 @@ section .text
     push ecx
     _dongu_bas:
     pop ecx
-    sub ecx, 1 ; dec ecx 
+    sub ecx, 1      ;dec ecx 
     cmp ecx, 0
-    je _exit ; jump zero
+    je _exit        ;jump equal
     push ecx
     jmp _print
 

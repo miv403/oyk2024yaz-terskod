@@ -1,10 +1,17 @@
+---
+   date: 2024-08-29T16:33
+---
 # ders 1
+
+relocation truncated to fit
+
+`global _start`: `_start` etiketi ile başla
 
 ## Stack
 
-ilgili `push` talimatlarına breakpoint koyduktan sonra `run` ile program çalıştırılır.
-c ile program breakpointlerden sonra devam ettirilir. `info registers esp` ile stack ptr
-kaydedicisininin içeriği denetlenebilir.
+ilgili `push` talimatlarına `breakpoint` koyduktan sonra `run` ile program çalıştırılır.
+`c` komutu ile program breakpointlerden sonra devam ettirilir. `info registers esp` ile
+stack ptr kaydedicisininin içeriği denetlenebilir.
 
 - `call` çağrıldığı adresi stack'e koyuyor. [^1]
 - `ret` stackdeki son adres değerine geri dönüyor. [^2]
@@ -187,6 +194,37 @@ ebx            0xa                 10
 `ecx` kaydedicisi `_print` alt işleminde değiştirildiğinden ötürü `ecx` kaydedicisi
 `push` ile stack'e aktarıldıktan sonra `_print` alt işlemine atlanmalı. böylece
 `_dongu_bas` alt işlemine dönünce *stack*'deki döngü değişkeni tekrar kullanılabilir.
+
+## programın çıkış çağrısının olmaması
+
+**segmentation fault**:
+
+```gdb
+Breakpoint 1, 0x08049000 in _start ()
+(gdb) disas _start
+Dump of assembler code for function _start:
+=> 0x08049000 <+0>:     mov    eax,0x4
+   0x08049005 <+5>:     mov    ebx,0x1
+   0x0804900a <+10>:    mov    ecx,0x804a000
+   0x0804900f <+15>:    mov    edx,0x14
+   0x08049014 <+20>:    int    0x80
+End of assembler dump.
+(gdb) si
+0x08049005 in _start ()
+(gdb) si
+0x0804900a in _start ()
+(gdb) si
+0x0804900f in _start ()
+(gdb) si
+0x08049014 in _start ()
+(gdb) si
+Merhabalar, Dostum!
+0x08049016 in ?? ()
+(gdb) si
+
+Program received signal SIGSEGV, Segmentation fault.
+0x08049016 in ?? ()
+```
 
 [^1]: intel ref man s.155 ; intel ref man s.755
 [^2]: s.1771
