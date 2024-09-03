@@ -1,2 +1,4 @@
-./ders-*/bin/*
-./ders-*/o/*
+ders-?/bin/
+ders-?/o/
+ders-?/odev-?*/
+belge/
