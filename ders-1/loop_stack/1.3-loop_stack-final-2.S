@@ -4,7 +4,7 @@ global _start
 section .data
 
   align 2
-  hello: db 'Hello world! iter:  ', 0xa
+  hello: db 'Hello world! iter: ', 0xa
   helloLen: equ $-hello
   hello_iter_loc: equ $-hello-2 ; hello'nun uzunluğundan iki çıkarma
 
@@ -31,7 +31,6 @@ section .text
   jmp _dongu_bas
 
   _print:
-
   mov eax, 0x4
   mov ebx, 0x1
   mov ecx, hello

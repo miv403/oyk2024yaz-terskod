@@ -18,25 +18,6 @@ total 0
 
 > izin sıralaması; kullanıcı > grup > herkes
 
-## disassembling (parçalama)
-
-```terminal
-$ objdump -M intel -D hello
-             ^
-             amd64 de olabilir
-```
-
-### interrupt
-
-**interrupt**: kesme
-**poll**: iş var mı yok mu denetleme(?)
-
-`disas <fonksiyon-adı>`: assembly code
-
-`run`: programı çalıştırma
-
-`break <fonksiyon-adı>`: breakpoint
-
 **örnek kullanımlar;**
 
 - `nasm  -f elf32 -o hello.o hello.S` [^1]
@@ -56,6 +37,8 @@ hello_elf32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), staticall
 
 [little endian vs big endian](https://thebittheories.com/little-endian-vs-big-endian-b4046c63e1f2)
 
+aynı ikil sayı dizisi farklı biçimlerde okunabilir:
+
 ```text
 1011001
 ^
@@ -65,6 +48,37 @@ hello_elf32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), staticall
       ^
       2^7
 ```
+
+işlemcinin sonluluk düzenine göre verilen karakter dizisi
+farklı biçimlerde sıralanabilir.
+
+## disassembling (parçalama)
+
+[intel reference manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+
+```terminal
+$ objdump -M intel -D hello
+             ^        ^
+     söz dizim        ikil dosya-
+  amd64 de ola-       nın adı
+         bilir.
+```
+
+### sistem çağrıları
+
+- **interrupt**: kesme
+- **poll**: yapılan bir işin varlığını denetleme(?)
+
+`int 0x80`: eax'deki numaradaki syscall çağırılıyor.
+
+ön hazırlık (kaydedicilerin doldurulması) tamamlandıktan
+sonra int çalıştırılıyor ve gerekli parametreler ile
+sistem çağrısı gerçekleşiyor
+
+- [linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
+- [linux syscalls](https://x86.syscall.sh/)
+- [linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
+- [read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
 
 ### kaydediciler
 
@@ -77,17 +91,28 @@ hello_elf32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), staticall
 - IP: instruction pointer
 - SP: stack pointer
 
-`_start`'a breakpoint koyduktan sonra `disas _start` ile `_start`ın içine bakıyoruz. `si` ile programı ilerletiyoruz. `info registers <register>` ile register(lar)'a bakılabiliyor.
+`_start`'a breakpoint koyduktan sonra `disas _start` ile
+`_start`ın içine bakıyoruz. `si` ile programı
+ilerletiyoruz. `info registers <register>` ile
+register(lar)'a bakılabiliyor.
 
-> [!NOTE] örnek
-> kaydedicilerin içeriğine bakmak
+> [!NOTE] kaydedicilerin içeriğine bakmak
 >
 > ```terminal
 > (gdb) info registers eax
->  eax registerları gösteriyor
+>
+>  eax kaydedicisinin içeriğini gösterir
 > ```
 
 ### gdb
+
+`disas <fonksiyon-adı>`: belirtilen izlence
+bölümünün parçalanması.
+
+`run`: programı çalıştırma
+
+`break <fonksiyon-adı>`: breakpoint, kırılma
+noktası belirtme
 
 > [!NOTE] intel gösteriminin kullanılması
 >
@@ -135,22 +160,9 @@ ecx            0x804a000           134520832
 edx            0x14                20
 ```
 
-[intel reference manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
+`(gdb) x <adrr>`: istenen adresin/kaydedicinin yazdırılması
 
-#### sistem çağrıları
-
-`int 0x80`: eax'deki numaradaki syscall çağırılıyor.
-
-ön hazırlık (kaydedicilerin doldurulması) tamamlandıktan sonra int çalıştırılıyor ve gerekli parametreler ile sistem çağrısı gerçekleşiyor
-
-- [linux int syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86-32_bit)
-- [linux syscalls](https://x86.syscall.sh/)
-- [linux sistem çağrıları kaynak kodları](https://elixir.bootlin.com/linux/v6.10.6/A/ident/sys_write)
-- [read_write.c](https://elixir.bootlin.com/linux/v6.10.6/source/fs/read_write.c#L652)
-
-`(gdb) x <adrr>`
-
-`xxd <ikil dosya>`
+`xxd <ikil dosya>`: ikil dosyanın ascii ve onaltılık gösteriminin çıktısı
 
 ```gdb
 (gdb) x 0x08049000
@@ -163,19 +175,15 @@ edx            0x14                20
 0x804a000:      72 'H'  101 'e' 108 'l' 108 'l' 111 'o' 32 ' '  87 'W'  111 'o'
 0x804a008:      114 'r' 108 'l'
 (gdb) x/10s 0x804a000
-0x804a000:      "Hello World\n"<error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
-0x804a00c:      <error: Cannot access memory at address 0x804a00c>
+        ^
+        10 tane adresi gösterir.
+        bu çıktıda diğer adreslere
+        erişilemiyor.
+
+0x804a000:      "Hello World\n"
 ```
 
 [^1]: nesne (object) dosyasına dönüştürme
 [^2]: bütüncül disassembler programı
 [^3]: linkleme işlemi
-[^4]: ikil sayı
+[^4]: binary digit, ikil sayı
