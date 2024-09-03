@@ -96,7 +96,9 @@ sistem çağrısı gerçekleşiyor
 ilerletiyoruz. `info registers <register>` ile
 register(lar)'a bakılabiliyor.
 
-> [!NOTE] kaydedicilerin içeriğine bakmak
+> [!NOTE]
+>
+> kaydedicilerin içeriğine bakmak
 >
 > ```terminal
 > (gdb) info registers eax
@@ -114,7 +116,9 @@ bölümünün parçalanması.
 `break <fonksiyon-adı>`: breakpoint, kırılma
 noktası belirtme
 
-> [!NOTE] intel gösteriminin kullanılması
+> [!NOTE]
+>
+> intel gösteriminin kullanılması
 >
 > ```gdb
 > (gdb) set disassembly-flavor intel
